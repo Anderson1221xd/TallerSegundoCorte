@@ -61,5 +61,7 @@ Luego, abre en tu navegador http://localhost:8100
 │-- styles.css
 
  Autor
-✍️ Desarrollado por Anderson Castilla Audivey
+✍️ Desarrollado por Anderson Castilla Audivet
+
+(el taller como puede ver lo subi a tiempo pero se me olvido registrarlo en el formulario)
 
