@@ -1,20 +1,72 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>Todo List</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+<ion-content>
+  <ion-button expand="full" (click)="addTask()">Añadir Tarea</ion-button>
+
+  <ion-list>
+    <ion-item *ngFor="let task of tasks$ | async">
+      <ion-label>
+        <h2>{{ task.title }}</h2>
+        <p>{{ task.description }}</p>
+        <p>Fecha: {{ task.date | date: 'short' }}</p>
+      </ion-label>
+
+      <ion-checkbox
+        slot="start"
+        [checked]="task.done"
+        (ionChange)="toggleTask(task)"
+      ></ion-checkbox>
+
+      <ion-button fill="clear" (click)="openEditModal(task)">
+        <ion-icon name="create"></ion-icon>
+      </ion-button>
+
+      <ion-button fill="clear" color="danger" (click)="deleteTask(task.id!)">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-modal #editTaskModal *ngIf="selectedTask">
+  <ion-header>
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title>Editar Tarea</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">Cerrar</ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
-</ion-content>
+  <ion-content>
+    <form #editForm="ngForm" (ngSubmit)="updateTask()">
+      <ion-item>
+        <ion-label position="floating">Título</ion-label>
+        <ion-input
+          [(ngModel)]="selectedTask.title"
+          name="title"
+          required
+          placeholder="Escribe el título"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Descripción</ion-label>
+        <ion-textarea
+          [(ngModel)]="selectedTask.description"
+          name="description"
+          required
+          placeholder="Escribe la descripción"
+        ></ion-textarea>
+      </ion-item>
+
+      <ion-button expand="full" type="submit" [disabled]="editForm.invalid">
+        Guardar Cambios
+      </ion-button>
+    </form>
+  </ion-content>
+</ion-modal>
